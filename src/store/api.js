@@ -1,0 +1,1 @@
+export const apiUrl = 'https://postify-api.herokuapp.com/'
