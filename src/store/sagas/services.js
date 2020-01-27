@@ -17,7 +17,6 @@ export const registerUserService = (request) => {
         return response.json();
       })
       .then(json => {
-          console.log('json', json)
         return json;
       });
   };
@@ -30,7 +29,7 @@ export const registerUserService = (request) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(request.user)
+      body: JSON.stringify(request.data)
     };
   
     return fetch(LOGIN_API_ENDPOINT, parameters)

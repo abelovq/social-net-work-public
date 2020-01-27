@@ -1,22 +1,14 @@
 import * as types from '../constants';
 
-const initialState = {
-    id: null,
-    uid: null,
-    first_name: '',
-    last_name: '',
-    email: ''
-}
+const initialState = {isLogged: false}
 
 export default (state = initialState, action) => {
-  let response = action.response;
-    console.log(response)
   switch(action.type) {
     case types.REGISTER_USER_SUCCESS:
-        console.log('action', action)
-      return { ...state, response };
+        const { data } = action.response;
+        return { ...state, data, isLogged: true};
     case types.REGISTER_USER_FAILURE:
-      return { ...state, response };
+      return { ...state };
     default:
       return state;
   }

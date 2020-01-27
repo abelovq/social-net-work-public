@@ -8,8 +8,9 @@ export const registerUser = (data) => {
   }
 }
 
-// export const loginUser = (data) => {
-//   return {
-//     type: types
-//   }
-// }
+export const loginUser = (data) => {
+  return {
+    type: types.LOGIN_USER, 
+    data
+  }
+}

@@ -13,18 +13,16 @@ function* registerSaga(payload) {
   }
 }
 
-// function* loginSaga(payload) {
-//   try {
-//     const response = yield call(loginUserService, payload);
-//     yield [
-//       put({ type: types.LOGIN_USER_SUCCESS, response })
-//     ];
-//   } catch(error) {
-//     yield put({ type: types.LOGIN_USER_ERROR, error })
-//   }
-// }
+function* loginSaga(payload) {
+  try {
+    const response = yield call(loginUserService, payload);
+    yield put({ type: types.LOGIN_USER_SUCCESS, response });
+  } catch(error) {
+    yield put({ type: types.LOGIN_USER_FAILURE, error })
+  }
+}
 
 export default function* watchUserAuthentication() {
   yield takeEvery(types.REGISTER_USER, registerSaga);
-//   yield takeEvery(types.LOGIN_USER, loginSaga);
+  yield takeEvery(types.LOGIN_USER, loginSaga);
 }

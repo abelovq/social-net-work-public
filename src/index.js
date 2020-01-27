@@ -13,6 +13,8 @@ import { Provider } from 'react-redux';
 import reducer from './store/reducers';
 import rootSaga from './store/sagas';
 import Signup from './pages/Signup/Signup';
+import Main from './pages/Main/Main';
+import Login from './pages/Login';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -31,6 +33,8 @@ ReactDOM.render(
             <Switch>
                 <Route exact path="/" component={App} />
                 <Route path="/register" component={Signup} />
+                <Route path="/login" component={Login} />
+                <Route path="/main" component={Main} />
             </Switch>
         </Router>
     </Provider> , document.getElementById('root'));

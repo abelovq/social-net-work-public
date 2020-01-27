@@ -4,13 +4,13 @@ import { Redirect } from 'react-router-dom';
 
 import { TextField, Container } from '@material-ui/core';
 
-import { registerUser } from '../../store/actions';
+import { loginUser } from '../../store/actions';
 
-class Signup extends Component {
+class Login extends Component {
+
     state = {
         email: '',
-        password: '',
-        password_confirm: '',
+        password: ''
     }
 
     handleInput = ( {target} ) => {
@@ -19,29 +19,26 @@ class Signup extends Component {
         })
     }
 
-    handleRegister = (e) => {
+    handleLogin = (e) => {
         e.preventDefault();
-        const { email, password, password_confirm } = this.state;
+        const { email, password } = this.state;
         if (email && password) {
-            if (password === password_confirm) {
-                const data = {
-                    email,
-                    password,
-                    password_confirm
-                }
-                this.props.registerUser(data);
+            const data = {
+                email,
+                password
             }
+            this.props.loginUser(data);
         }
         return;
     }
 
     render() {
-        const { isLogged } = this.props.registerData;
+        const { isLogged } = this.props.user;
         return (
             <Container maxWidth="sm">
                 {isLogged && <Redirect to="main" />}
-                <h1>welcome to social net work</h1>
-                <form noValidate autoComplete="off" onSubmit={this.handleRegister}>
+                <h1>Login</h1>
+                <form noValidate autoComplete="off" onSubmit={this.handleLogin}>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -63,21 +60,11 @@ class Signup extends Component {
                         fullWidth
                         onChange={this.handleInput}
                     />
-                    <TextField
-                        value={this.state.password_confirm}
-                        margin="dense"
-                        id="name"
-                        label="Confirm password"
-                        type="password"
-                        name="password_confirm"
-                        fullWidth
-                        onChange={this.handleInput}
-                    />
                     <button 
                         style={{marginTop: '20px'}} 
                         type="submit"
                     >
-                        Register
+                        Login
                     </button>
                 </form>
             </Container>
@@ -87,14 +74,14 @@ class Signup extends Component {
 
 const mapStateToProps = state => {
     return {
-        registerData: state.register
+        user: state.register
     }
 }
 
-const mapDispathToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        registerUser: (data) => dispatch(registerUser(data))
+        loginUser: (data) => dispatch(loginUser(data))
     }
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
