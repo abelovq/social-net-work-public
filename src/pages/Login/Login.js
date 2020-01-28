@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import { TextField, Container } from '@material-ui/core';
 
@@ -33,10 +33,9 @@ class Login extends Component {
     }
 
     render() {
-        const { isLogged } = this.props.user;
         return (
             <Container maxWidth="sm">
-                {isLogged && <Redirect to="main" />}
+                {localStorage.getItem('authToken') && <Redirect to="/main" />}
                 <h1>Login</h1>
                 <form noValidate autoComplete="off" onSubmit={this.handleLogin}>
                     <TextField
@@ -60,12 +59,16 @@ class Login extends Component {
                         fullWidth
                         onChange={this.handleInput}
                     />
-                    <button 
-                        style={{marginTop: '20px'}} 
-                        type="submit"
-                    >
-                        Login
-                    </button>
+                    <div>
+                        <button 
+                            style={{marginTop: '20px'}} 
+                            type="submit"
+                        >
+                            Login
+                        </button>
+                        <p>Don't have an account?</p>
+                        <Link to="/">Sign Up</Link>
+                    </div>
                 </form>
             </Container>
         )

@@ -4,7 +4,10 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
+
+import { createBrowserHistory } from 'history';
+
 import createSagaMiddleware from 'redux-saga';
 import {createStore, applyMiddleware, compose} from 'redux';
 
@@ -16,6 +19,8 @@ import Signup from './pages/Signup/Signup';
 import Main from './pages/Main/Main';
 import Login from './pages/Login';
 
+const history = createBrowserHistory(); 
+
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
     reducer, 
@@ -26,15 +31,29 @@ const store = createStore(
 );
 
 sagaMiddleware.run(rootSaga)
+ 
+const PrivateRoute = ({ component: Component, ...rest }) => {
+    return (
+        <Route
+        {...rest}
+        render={props =>
+            localStorage.getItem('authToken') ? 
+                <Component {...props} />
+                :
+                <Redirect to="/login" />
+        }
+        />
+    );
+};
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
+        <Router history={history}>
             <Switch>
-                <Route exact path="/" component={App} />
-                <Route path="/register" component={Signup} />
+                <Route exact path="/" component={Signup} />
                 <Route path="/login" component={Login} />
-                <Route path="/main" component={Main} />
+                <PrivateRoute path="/main" component={Main} />
+                <Redirect from='*' to="/" />
             </Switch>
         </Router>
     </Provider> , document.getElementById('root'));
@@ -43,3 +62,5 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+export { history };

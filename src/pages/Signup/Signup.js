@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import { TextField, Container } from '@material-ui/core';
 
@@ -11,6 +12,7 @@ class Signup extends Component {
         email: '',
         password: '',
         password_confirm: '',
+        password_confirmError: false
     }
 
     handleInput = ( {target} ) => {
@@ -29,17 +31,23 @@ class Signup extends Component {
                     password,
                     password_confirm
                 }
+                this.setState({
+                    password_confirmError: false
+                })
                 this.props.registerUser(data);
+            } else {
+                this.setState({
+                    password_confirmError: true
+                })
             }
         }
         return;
     }
 
     render() {
-        const { isLogged } = this.props.registerData;
         return (
             <Container maxWidth="sm">
-                {isLogged && <Redirect to="main" />}
+                {localStorage.getItem('authToken') && <Redirect to="/main" />}
                 <h1>welcome to social net work</h1>
                 <form noValidate autoComplete="off" onSubmit={this.handleRegister}>
                     <TextField
@@ -73,12 +81,17 @@ class Signup extends Component {
                         fullWidth
                         onChange={this.handleInput}
                     />
+                    {this.state.password_confirmError && <p style={{color: 'red'}}>Wrong confirm password</p>}
                     <button 
                         style={{marginTop: '20px'}} 
                         type="submit"
                     >
                         Register
                     </button>
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <p style={{marginRight: '20px'}}>Already have an account?</p>
+                        <Link to="/login">Sign In</Link>
+                    </div>
                 </form>
             </Container>
         )

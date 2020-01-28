@@ -14,3 +14,10 @@ export const loginUser = (data) => {
     data
   }
 }
+
+export const logOut = () => {
+  localStorage.clear();
+  return {
+    type: types.LOGOUT_USER
+  }
+}

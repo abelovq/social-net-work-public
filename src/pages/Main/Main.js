@@ -1,13 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { withRouter } from "react-router-dom"
+
+import Layout from '../../components/Layout';
+import Header from '../../components/Header';
+import Posts from '../../components/Posts';
 
 class Main extends Component {
     render() {
         return (
             <div>
-                <h1>Main</h1>
+                <Layout header={<Header />}>
+                    <Posts />
+                </Layout>
             </div>
         )
     }
 }
 
-export default Main;
+export default withRouter(Main);

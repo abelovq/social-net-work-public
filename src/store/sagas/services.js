@@ -1,7 +1,12 @@
 const apiUrl = 'https://postify-api.herokuapp.com';
 
+function saveToken({ headers }) {
+  const items = Object.fromEntries(headers);
+  const { 'cache-control': cc, 'content-type': ct, ...rest } = items;
+  localStorage.setItem('authToken', JSON.stringify(rest))
+}
+
 export const registerUserService = (request) => {
-    console.log(request)
     const REGISTER_API_ENDPOINT = `${apiUrl}/auth`
     
     const parameters = {
@@ -14,11 +19,17 @@ export const registerUserService = (request) => {
   
     return fetch(REGISTER_API_ENDPOINT, parameters)
       .then(response => {
-        return response.json();
+        if (!response.ok) {
+          console.log('NEOK')
+          throw new Error("HTTP status " + response.status);
+        } 
+        saveToken(response);
+          return response.json();
       })
       .then(json => {
         return json;
-      });
+      })
+      .catch(err => err);
   };
   
   export const loginUserService = (request) => {
@@ -38,5 +49,27 @@ export const registerUserService = (request) => {
       })
       .then(json => {
         return json;
-      });
+      })
+      .catch(err => err);
+  };
+
+  export const postsService = (request) => {
+    const GET_POSTS_API_ENDPOINT = `${apiUrl}/posts`;
+  
+    const parameters = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request.data)
+    };
+  
+    return fetch(GET_POSTS_API_ENDPOINT, parameters)
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        return json;
+      })
+      .catch(err => err);
   };
