@@ -1,90 +1,86 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Redirect, Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect, Link } from "react-router-dom";
 
-import { TextField, Container } from '@material-ui/core';
+import { TextField, Container } from "@material-ui/core";
 
-import { loginUser } from '../../store/actions';
+import { loginUser } from "../../store/actions";
 
 class Login extends Component {
+  state = {
+    email: "",
+    password: ""
+  };
 
-    state = {
-        email: '',
-        password: ''
-    }
+  handleInput = ({ target }) => {
+    this.setState({
+      [target.name]: target.value
+    });
+  };
 
-    handleInput = ( {target} ) => {
-        this.setState({
-            [target.name]: target.value
-        })
+  handleLogin = e => {
+    e.preventDefault();
+    const { email, password } = this.state;
+    if (email && password) {
+      const data = {
+        email,
+        password
+      };
+      this.props.loginUser(data);
     }
+    return;
+  };
 
-    handleLogin = (e) => {
-        e.preventDefault();
-        const { email, password } = this.state;
-        if (email && password) {
-            const data = {
-                email,
-                password
-            }
-            this.props.loginUser(data);
-        }
-        return;
-    }
-
-    render() {
-        return (
-            <Container maxWidth="sm">
-                {localStorage.getItem('authToken') && <Redirect to="/main" />}
-                <h1>Login</h1>
-                <form noValidate autoComplete="off" onSubmit={this.handleLogin}>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        value={this.state.email}
-                        label="Email Address"
-                        type="email"
-                        name="email"
-                        fullWidth
-                        onChange={this.handleInput}
-                    />
-                    <TextField
-                        value={this.state.password}
-                        margin="dense"
-                        id="name"
-                        label="Password"
-                        type="password"
-                        name="password"
-                        fullWidth
-                        onChange={this.handleInput}
-                    />
-                    <div>
-                        <button 
-                            style={{marginTop: '20px'}} 
-                            type="submit"
-                        >
-                            Login
-                        </button>
-                        <p>Don't have an account?</p>
-                        <Link to="/">Sign Up</Link>
-                    </div>
-                </form>
-            </Container>
-        )
-    }
+  render() {
+    return (
+      <Container maxWidth="sm">
+        {localStorage.getItem("authToken") && <Redirect to="/main" />}
+        <h1>Login</h1>
+        <form noValidate autoComplete="off" onSubmit={this.handleLogin}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            value={this.state.email}
+            label="Email Address"
+            type="email"
+            name="email"
+            fullWidth
+            onChange={this.handleInput}
+          />
+          <TextField
+            value={this.state.password}
+            margin="dense"
+            id="name"
+            label="Password"
+            type="password"
+            name="password"
+            fullWidth
+            onChange={this.handleInput}
+          />
+          <div>
+            <button style={{ marginTop: "20px" }} type="submit">
+              Login
+            </button>
+            <p>Don't have an account?</p>
+            <Link to="/">Sign Up</Link>
+          </div>
+        </form>
+      </Container>
+    );
+  }
 }
 
 const mapStateToProps = state => {
-    return {
-        user: state.register
-    }
-}
+  return {
+    user: state.register
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        loginUser: (data) => dispatch(loginUser(data))
-    }
-}
+const mapDispatchToProps = dispatch => {
+  return {
+    loginUser: data => dispatch(loginUser(data))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
