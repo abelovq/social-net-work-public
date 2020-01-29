@@ -18,7 +18,6 @@ export default (state = initialState, action) => {
         posts: [...state.posts, action.response]
       };
     case types.GET_POST_SUCCESS:
-      console.log(action.response);
       return {
         ...state,
         currentPost: action.response

@@ -3,7 +3,7 @@ import { createPostService } from "./services";
 
 import * as types from "../constants";
 
-function* createPostsSaga(payload) {
+function* createPostSaga(payload) {
   console.log("payload", payload);
   try {
     const response = yield call(createPostService, payload);
@@ -15,5 +15,5 @@ function* createPostsSaga(payload) {
 }
 
 export default function* watchCreatePostSaga() {
-  yield takeEvery(types.CREATE_POST, createPostsSaga);
+  yield takeEvery(types.CREATE_POST, createPostSaga);
 }

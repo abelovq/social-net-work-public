@@ -3,12 +3,14 @@ import watchUserAuthentication from "./authSaga";
 import watchloadPostsSaga from "./loadPostsSaga";
 import watchCreatePostSaga from "./createPostSaga";
 import watchGetPostSaga from "./getPostSaga";
+import watchChangePostSaga from './changePostSaga';
 
 export default function* rootSaga() {
   yield all([
     fork(watchUserAuthentication),
     fork(watchloadPostsSaga),
     fork(watchCreatePostSaga),
-    fork(watchGetPostSaga)
+    fork(watchGetPostSaga),
+    fork(watchChangePostSaga)
   ]);
 }

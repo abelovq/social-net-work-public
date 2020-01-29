@@ -1,12 +1,11 @@
 import { put, call, takeEvery } from "redux-saga/effects";
-import { registerUserService, loginUserService } from "./services";
+import { registerUserService, loginUserService, getCurrentUserService } from "./services";
 
 import { history } from "../../index";
 
 import * as types from "../constants";
 
 function forwardTo(location) {
-  console.log(1);
   history.push(location);
 }
 
@@ -39,8 +38,19 @@ function* logOutSaga() {
   }
 }
 
+function* getCurrentUser() {
+  try {
+    const response = yield call(getCurrentUserService);
+    yield put({type: types.GET_CURRENT_USER_SUCCESS, response})
+  }
+  catch (err) {
+    console.log(err);
+  }
+}
+
 export default function* watchUserAuthentication() {
   yield takeEvery(types.REGISTER_USER, registerSaga);
   yield takeEvery(types.LOGIN_USER, loginSaga);
   yield takeEvery(types.LOGOUT_USER, logOutSaga);
+  yield takeEvery(types.GET_CURRENT_USER, getCurrentUser)
 }

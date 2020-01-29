@@ -3,10 +3,9 @@ import { getPostService } from "./services";
 
 import * as types from "../constants";
 
-function* getPostSaga(payload) {
-  console.log("payload", payload);
+function* getPostSaga({ id }) {
   try {
-    const response = yield call(getPostService, payload.id);
+    const response = yield call(getPostService, id);
     yield put({ type: types.GET_POST_SUCCESS, response });
   } catch (error) {
     console.log("error", error);

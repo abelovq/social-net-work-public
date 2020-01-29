@@ -20,7 +20,7 @@ class Signup extends Component {
 
   handleInput = ({ target }) => {
     this.setState({
-      [target.name]: target.value
+      [target.name]: target.value.trim()
     });
   };
 

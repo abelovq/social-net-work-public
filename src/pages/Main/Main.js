@@ -4,8 +4,17 @@ import { withRouter } from "react-router-dom";
 import Posts from "../../components/Posts";
 
 class Main extends Component {
+
+  async componenDidMount() {
+    
+  }
+
   render() {
-    return <Posts />;
+    return (
+    <>
+      <Posts />
+    </>
+    )
   }
 }
 

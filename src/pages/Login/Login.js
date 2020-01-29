@@ -59,9 +59,7 @@ class Login extends Component {
             onChange={this.handleInput}
           />
           <div>
-            <button style={{ marginTop: "20px" }} type="submit">
-              Login
-            </button>
+            <input style={{ marginTop: "20px" }} type="submit" value="Login" />
             <p>Don't have an account?</p>
             <Link to="/">Sign Up</Link>
           </div>

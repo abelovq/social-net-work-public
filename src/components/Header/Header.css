@@ -3,6 +3,11 @@
     justify-content: flex-end;
 }
 
-.logout-btn {
+.header .logout-btn {
     margin: 50px;
+    margin-left: 10px;
+}
+
+.header .profile-button {
+    margin: 50px 10px 50px 50px;
 }

@@ -1,9 +1,13 @@
-const apiUrl = "https://postify-api.herokuapp.com";
+export const apiUrl = "https://postify-api.herokuapp.com";
 
 function saveToken({ headers }) {
   const items = Object.fromEntries(headers);
   const { "cache-control": cc, "content-type": ct, ...rest } = items;
   localStorage.setItem("authToken", JSON.stringify(rest));
+}
+
+export function getCreds() {
+  return JSON.parse(localStorage.getItem("authToken"));
 }
 
 export const registerUserService = request => {
@@ -33,7 +37,6 @@ export const registerUserService = request => {
 };
 
 export const loginUserService = request => {
-  console.log("REQ DATA", request.data);
   const LOGIN_API_ENDPOINT = `${apiUrl}/auth/sign_in`;
 
   const parameters = {
@@ -50,7 +53,6 @@ export const loginUserService = request => {
       return response.json();
     })
     .then(json => {
-      console.log("JSWON", json);
       return json;
     })
     .catch(err => err);
@@ -59,7 +61,7 @@ export const loginUserService = request => {
 export const loadPostsService = () => {
   const GET_POSTS_API_ENDPOINT = `${apiUrl}/posts`;
 
-  const credentials = JSON.parse(localStorage.getItem("authToken"));
+  const credentials = getCreds();
 
   const parameters = {
     method: "GET",
@@ -76,7 +78,6 @@ export const loadPostsService = () => {
       return response.json();
     })
     .then(json => {
-      console.log("json", json);
       return json;
     })
     .catch(err => err);
@@ -85,7 +86,7 @@ export const loadPostsService = () => {
 export const createPostService = request => {
   const CREATE_POST_API_ENDPOINT = `${apiUrl}/posts`;
 
-  const credentials = JSON.parse(localStorage.getItem("authToken"));
+  const credentials = getCreds();
 
   const parameters = {
     method: "POST",
@@ -103,16 +104,16 @@ export const createPostService = request => {
       return response.json();
     })
     .then(json => {
-      console.log("json", json);
       return json;
     })
     .catch(err => err);
 };
 
+
 export const getPostService = id => {
   const GET_POST_API_ENDPOINT = `${apiUrl}/posts/${id}`;
 
-  const credentials = JSON.parse(localStorage.getItem("authToken"));
+  const credentials = getCreds();
 
   const parameters = {
     method: "GET",
@@ -129,8 +130,53 @@ export const getPostService = id => {
       return response.json();
     })
     .then(json => {
-      console.log("json", json);
       return json;
     })
     .catch(err => err);
 };
+
+export const changePostService = ({id, data}) => {
+  const CHANGE_POST_API_ENDPOINT = `${apiUrl}/posts/${id}`;
+
+  const credentials = getCreds();
+
+  const parameters = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "access-token": credentials["access-token"],
+      client: credentials.client,
+      uid: credentials.uid
+    },
+    body: JSON.stringify(data)
+  };
+
+  return fetch(CHANGE_POST_API_ENDPOINT, parameters)
+    .then(response => {
+      return response.json();
+    })
+    .then(json => {
+      console.log(json)
+      return json;
+    })
+    .catch(err => err);
+}
+
+export const getCurrentUserService = () => {
+  console.log('serv')
+  const GET_CURRENT_USER_API_ENDPOINT = `${apiUrl}/users/me`;
+  const credentials = getCreds();
+
+  const parameters = {
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json",
+      ...credentials
+    },
+  }
+
+  return fetch(GET_CURRENT_USER_API_ENDPOINT, parameters)
+    .then(response => response.json())
+    .then(json => json)
+    .catch(err => err);
+}

@@ -1,7 +1,6 @@
 import * as types from "../constants";
 
 export const registerUser = data => {
-  console.log(data);
   return {
     type: types.REGISTER_USER,
     data
@@ -41,3 +40,18 @@ export const getPost = id => {
     id
   };
 };
+
+export const changePost = (id, data) => {
+  return {
+    type: types.CHANGE_POST,
+    id,
+    data
+  }
+}
+
+export const getCurrentUser = () => {
+  console.log('CALL')
+  return {
+    type: types.GET_CURRENT_USER,
+  }
+}
