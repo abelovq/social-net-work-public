@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-import { TextField, Container } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
 import { createPost } from "../../store/actions";
 
 import "./AddPostForm.css";
 
 export class AddPostForm extends Component {
+  static propTypes = {
+    createPost: PropTypes.func.isRequired
+  };
+
   state = {
     title: "",
     description: ""

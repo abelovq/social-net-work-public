@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import isEmail from "validator/lib/isEmail";
-import classNames from "classnames";
 
 import { TextField, Container } from "@material-ui/core";
 
@@ -65,7 +64,7 @@ class Signup extends Component {
   render() {
     return (
       <Container maxWidth="sm">
-        {localStorage.getItem("authToken") && <Redirect to="/main" />}
+        {JSON.parse(localStorage.getItem("authToken")) && <Redirect to="/" />}
         <h1>welcome to social net work</h1>
         <form noValidate autoComplete="off" onSubmit={this.handleRegister}>
           <TextField

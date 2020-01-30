@@ -34,7 +34,7 @@ class Login extends Component {
   render() {
     return (
       <Container maxWidth="sm">
-        {localStorage.getItem("authToken") && <Redirect to="/main" />}
+        {JSON.parse(localStorage.getItem("authToken")) && <Redirect to="/" />}
         <h1>Login</h1>
         <form noValidate autoComplete="off" onSubmit={this.handleLogin}>
           <TextField
@@ -61,7 +61,7 @@ class Login extends Component {
           <div>
             <input style={{ marginTop: "20px" }} type="submit" value="Login" />
             <p>Don't have an account?</p>
-            <Link to="/">Sign Up</Link>
+            <Link to="/sign_up">Sign Up</Link>
           </div>
         </form>
       </Container>

@@ -1,13 +1,13 @@
 import * as types from "../constants";
 
-import { getCommentsForUser } from "../utils";
+import { sortItemsByDate } from "../utils";
 
 const initialState = {
   posts: [],
   currentPost: {
     comments: []
   },
-  commentsAll: []
+  loading: false
 };
 
 export default (state = initialState, action) => {
@@ -22,25 +22,45 @@ export default (state = initialState, action) => {
         ...state,
         posts: [...state.posts, action.response]
       };
-    case types.GET_POST_SUCCESS:
+    case types.GET_POST_REQUEST:
       return {
         ...state,
-        currentPost: action.response
+        loading: true
       };
-    case types.GET_ALL_COMMENTS_SUCCESS:
-      console.log("SHOW_COMMENT", action.response);
-      const userComments = getCommentsForUser(
-        action.response,
-        state.currentPost.user_id
-      );
-      console.log("userComments", userComments);
+    case types.GET_POST_SUCCESS:
+      const { response } = action;
+      return {
+        ...state,
+        loading: false,
+        currentPost: {
+          ...state.currentPost,
+          ...response,
+          comments: [...state.currentPost.comments]
+        }
+      };
+    case types.GET_POST_COMMENTS_SUCCESS:
       return {
         ...state,
         currentPost: {
           ...state.currentPost,
-          comments: [...userComments]
-        },
-        commentsAll: [...state.commentsAll, action.response]
+          comments: [...sortItemsByDate(action.response)]
+        }
+      };
+    case types.ADD_COMMENT_SUCCESS:
+      return {
+        ...state,
+        currentPost: {
+          ...state.currentPost,
+          comments: [action.response, ...state.currentPost.comments]
+        }
+      };
+    case types.DELETE_COMMENT_SUCCESS:
+      const newComments = state.currentPost.comments.filter(
+        comment => comment.id !== action.response
+      );
+      return {
+        ...state,
+        currentPost: { ...state.currentPost, comments: newComments }
       };
     default:
       return state;

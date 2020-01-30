@@ -17,7 +17,7 @@ function* registerSaga(payload) {
   try {
     const response = yield call(registerUserService, payload);
     yield put({ type: types.REGISTER_USER_SUCCESS, response });
-    yield call(forwardTo, "/main");
+    yield call(forwardTo, "/");
   } catch (error) {
     console.log("error", error);
     yield put({ type: types.REGISTER_USER_FAILURE, error });
@@ -28,7 +28,7 @@ function* loginSaga(payload) {
   try {
     const response = yield call(loginUserService, payload);
     yield put({ type: types.LOGIN_USER_SUCCESS, response });
-    yield call(forwardTo, "/main");
+    yield call(forwardTo, "/");
   } catch (error) {
     yield put({ type: types.LOGIN_USER_FAILURE, error });
   }

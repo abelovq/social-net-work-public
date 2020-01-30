@@ -162,7 +162,6 @@ export const changePostService = ({ id, data }) => {
 };
 
 export const getCurrentUserService = () => {
-  console.log("serv");
   const GET_CURRENT_USER_API_ENDPOINT = `${apiUrl}/users/me`;
   const credentials = getCreds();
 
@@ -177,22 +176,19 @@ export const getCurrentUserService = () => {
   return fetch(GET_CURRENT_USER_API_ENDPOINT, parameters)
     .then(response => {
       if (!response.ok) {
-        console.log("NEOK");
         throw new Error("HTTP status " + response.status);
       } else {
-        console.log("ELSE");
         return response.json();
       }
     })
     .then(json => json)
     .catch(err => {
-      console.log("CATCH ERR");
       return err;
     });
 };
 
-export const getAllCommentsService = () => {
-  const GET_COMMENT_API_ENDPOINT = `${apiUrl}/comments`;
+export const getPostCommentsService = id => {
+  const GET_COMMENTS_FOR_POST_API_ENDPOINT = `${apiUrl}/posts/${id}/comments`;
   const credentials = getCreds();
 
   const parameters = {
@@ -203,19 +199,114 @@ export const getAllCommentsService = () => {
     }
   };
 
-  return fetch(GET_COMMENT_API_ENDPOINT, parameters)
+  return fetch(GET_COMMENTS_FOR_POST_API_ENDPOINT, parameters)
     .then(response => {
       if (!response.ok) {
-        console.log("NEOK");
         throw new Error("HTTP status " + response.status);
       } else {
-        console.log("ELSE");
         return response.json();
       }
     })
     .then(json => json)
     .catch(err => {
-      console.log("CATCH ERR");
+      return err;
+    });
+};
+
+export const addCommentService = (message, id, type) => {
+  const ADD_COMMENT_API_ENDPOINT = `${apiUrl}/comments`;
+  const credentials = getCreds();
+
+  const parameters = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...credentials
+    },
+    body: JSON.stringify({
+      message,
+      commentable_id: id,
+      commentable_type: type
+    })
+  };
+
+  return fetch(ADD_COMMENT_API_ENDPOINT, parameters)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("HTTP status " + response.status);
+      } else {
+        return response.json();
+      }
+    })
+    .then(json => {
+      console.log("JWONCHIK", json);
+      return json;
+    })
+    .catch(err => {
+      return err;
+    });
+};
+
+export const changeCommentService = (message, id) => {
+  const ADD_COMMENT_API_ENDPOINT = `${apiUrl}/comments/${id}`;
+  const credentials = getCreds();
+
+  const parameters = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...credentials
+    },
+    body: JSON.stringify({
+      message
+    })
+  };
+
+  return fetch(ADD_COMMENT_API_ENDPOINT, parameters)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("HTTP status " + response.status);
+      } else {
+        return response.json();
+      }
+    })
+    .then(json => {
+      console.log("JWONCHIK", json);
+      return json;
+    })
+    .catch(err => {
+      return err;
+    });
+};
+
+export const deleteCommentService = id => {
+  const DELETE_COMMENT_API_ENDPOINT = `${apiUrl}/comments/${id}`;
+  const credentials = getCreds();
+
+  const parameters = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      ...credentials
+    }
+  };
+
+  return fetch(DELETE_COMMENT_API_ENDPOINT, parameters)
+    .then(response => {
+      console.log("THEN", response);
+      if (!response.ok) {
+        console.log("NOK");
+        throw new Error("HTTP status " + response.status);
+      } else {
+        return id;
+      }
+    })
+    .then(json => {
+      console.log("DELETE COMMENT", json);
+      return json;
+    })
+    .catch(err => {
+      console.log("ERR");
       return err;
     });
 };

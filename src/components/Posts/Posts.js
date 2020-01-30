@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NavLink, withRouter, Route } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 
-import { loadPosts, getPost } from "../../store/actions";
+import { loadPosts } from "../../store/actions";
 
 import AddPostForm from "../AddPostForm";
 
-import { sortItemsByCreated_at } from "../../store/utils";
+import { sortItemsByDate } from "../../store/utils";
 
 class Posts extends Component {
   componentDidMount() {
@@ -27,7 +27,7 @@ class Posts extends Component {
       <>
         <AddPostForm amount={posts.length && posts.length} />
         {posts.length &&
-          sortItemsByCreated_at(this.props.posts).map(post => (
+          sortItemsByDate(this.props.posts).map(post => (
             <div
               key={post.id}
               style={{ marginBottom: "10px", backgroundColor: "#eee" }}

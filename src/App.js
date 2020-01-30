@@ -35,52 +35,39 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 };
 
 class App extends React.Component {
-  state = {
-    loaded: false
-  };
-
   componentDidMount() {
-    console.log("HISTOY", this.props.history);
+    console.log("QQQQ");
     if (
-      this.props.history.location.pathname !== "/" &&
+      this.props.history.location.pathname !== "/sign_up" &&
       this.props.history.location.pathname !== "/login"
     ) {
-      console.log(1);
+      console.log("CDM");
       this.props.getCurrentUser();
     }
   }
 
-  componentDidUpdate() {
-    console.log("HISTOY", this.props.history);
-    if (
-      this.props.history.location.pathname !== "/" &&
-      this.props.history.location.pathname !== "/login"
-    ) {
-      console.log(1);
-      this.props.getCurrentUser();
-    }
-  }
-
-  // componentDidUpdate(nextState) {
-  //   if (this.state.loaded !== nextState.loaded) {
-  //     const { getCurrentUser } = this.props;
-  //     getCurrentUser();
+  // componentDidUpdate() {
+  //   if (
+  //     this.props.history.location.pathname !== "/sign_up" &&
+  //     this.props.history.location.pathname !== "/login"
+  //   ) {
+  //     this.props.getCurrentUser();
   //   }
-  //   return;
   // }
 
   render() {
-    console.log("QQQQQQQQQQQQQQQQQ");
+    console.log(this.props.history.location);
+    console.log(1);
     return (
       <Container maxWidth="sm">
-        <Route exact path="/" component={Signup} />
+        <Route path="/sign_up" component={Signup} />
         <Route path="/login" component={Login} />
         <Layout header={<Header />}>
-          <PrivateRoute path="/main" component={Main} />
+          <PrivateRoute exact path="/" component={Main} />
           <PrivateRoute path="/posts/:id" component={Post} />
           <PrivateRoute path="/profile" component={Profile} />
-          <Redirect from="*" to="/" />
         </Layout>
+        <Redirect from="*" to="/login" />
       </Container>
     );
   }

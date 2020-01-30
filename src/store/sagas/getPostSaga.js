@@ -5,6 +5,7 @@ import * as types from "../constants";
 
 function* getPostSaga({ id }) {
   try {
+    yield put({ type: types.GET_POST_REQUEST });
     const response = yield call(getPostService, id);
     yield put({ type: types.GET_POST_SUCCESS, response });
   } catch (error) {

@@ -1,14 +1,12 @@
 import * as types from "../constants";
 
 const initialState = {
-  user: {},
-  isAuth: false
+  user: {}
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.LOGIN_USER_SUCCESS:
-      const { data } = action.response;
       return { ...state };
     case types.LOGIN_USER_FAILURE:
       return { ...state };
@@ -19,17 +17,14 @@ export default (state = initialState, action) => {
       };
     case types.GET_CURRENT_USER_SUCCESS:
       const { data: user } = action.response;
-      console.log("SUCCESS", action.response);
-      return {
-        ...state,
-        user,
-        isAuth: true
-      };
+      console.log(user);
+      return { ...state };
+    //   ...state,
+    //   user: { ...user, user }
+    // };
     case types.GET_CURRENT_USER_FAILURE:
-      console.log("FAIl");
       return {
-        ...state,
-        isAuth: false
+        ...state
       };
     default:
       return state;

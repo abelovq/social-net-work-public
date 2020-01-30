@@ -8,25 +8,35 @@ import CardContent from "@material-ui/core/CardContent";
 import { TextField } from "@material-ui/core";
 
 import Comment from "../Comment";
+import AddCommentForm from "../AddCommentForm";
 
-import { getPost, changePost, showComments } from "../../store/actions";
+import { getPost, changePost, getComments } from "../../store/actions";
 
 import { parseData } from "../../store/utils";
 
 export class Post extends Component {
+  static propTypes = {
+    currentPost: PropTypes.object,
+    user: PropTypes.object
+  };
+
   state = {
     currentPost: null,
     title: "",
-    description: ""
+    description: "",
+    isShow: false
   };
 
   async componentDidMount() {
     const id = this.props.history.location.pathname.match(/[0-9]*$/);
+    const { getComments } = this.props;
+
     if (!localStorage.getItem("authToken")) {
       this.props.history.push("/");
     } else {
       try {
         await this.props.getPost(id[0]);
+        await getComments(id[0]);
       } catch (err) {
         console.log(err);
       }
@@ -70,13 +80,15 @@ export class Post extends Component {
   };
 
   handleShowComments = () => {
-    const { id: postId } = this.props.currentPost;
-    const { showComments } = this.props;
-    showComments(postId);
+    this.setState({
+      isShow: !this.state.isShow
+    });
   };
 
   render() {
     const { user_id: userPostId, comments = [] } = this.props.currentPost;
+    const { isShow } = this.state;
+    const { postLoading, commentsAmount } = this.props;
     const { id: userId } = this.props.user;
     const isOwnPost = userPostId === userId;
     const { title = "", description = "" } = this.state;
@@ -87,45 +99,60 @@ export class Post extends Component {
     }
     return (
       <>
-        <Card>
-          <CardContent>
-            {postCreatedAt}
-            <TextField
-              value={title}
-              margin="dense"
-              id="name"
-              label="title"
-              type="text"
-              name="title"
-              fullWidth
-              onChange={this.handleInput}
-            />
-            <TextField
-              value={description}
-              margin="dense"
-              id="name"
-              label="description"
-              type="text"
-              name="description"
-              fullWidth
-              onChange={this.handleInput}
-            />
-            <div style={{ marginTop: "20px" }}>
-              {isOwnPost && (
-                <button onClick={this.handleChangePost}>Change post</button>
-              )}
-              <button onClick={this.handleShowComments}>Show comments</button>
-              <button>Add comment</button>
-            </div>
-          </CardContent>
-        </Card>
-        {comments.length ? (
-          comments.map(comment => (
-            <Comment key={comment.id} comment={comment} />
-          ))
+        {postLoading ? (
+          <div>Loading .... </div>
         ) : (
-          <p>No comments yet</p>
+          <Card>
+            <CardContent>
+              {postCreatedAt}
+              <TextField
+                value={title}
+                margin="dense"
+                id="name"
+                label="title"
+                type="text"
+                name="title"
+                fullWidth
+                onChange={this.handleInput}
+                multiline
+              />
+              <TextField
+                value={description}
+                margin="dense"
+                id="name"
+                label="description"
+                type="text"
+                name="description"
+                fullWidth
+                onChange={this.handleInput}
+                multiline
+              />
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "200px"
+                }}
+              >
+                {isOwnPost && (
+                  <button onClick={this.handleChangePost}>Change post</button>
+                )}
+                <button onClick={this.handleShowComments}>
+                  {!isShow ? "Show comments" : "Hide comments"}
+                </button>
+              </div>
+            </CardContent>
+          </Card>
         )}
+        {isShow && <AddCommentForm />}
+        <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+          {comments.length && isShow
+            ? comments.map(comment => (
+                <Comment key={comment.id} comment={comment} />
+              ))
+            : isShow && <p>{commentsAmount === 0 && "No comments yet"}</p>}
+        </ul>
       </>
     );
   }
@@ -134,7 +161,9 @@ export class Post extends Component {
 const mapStateToProps = state => {
   return {
     currentPost: state.posts.currentPost,
-    user: state.login.user
+    user: state.login.user,
+    postLoading: state.posts.loading,
+    commentsAmount: state.posts.currentPost.comments.length
   };
 };
 
@@ -142,7 +171,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getPost: id => dispatch(getPost(id)),
     changePost: (id, data) => dispatch(changePost(id, data)),
-    showComments: id => dispatch(showComments(id))
+    getComments: id => dispatch(getComments(id))
   };
 };
 

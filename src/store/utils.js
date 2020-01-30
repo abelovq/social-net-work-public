@@ -1,4 +1,4 @@
-export function sortItemsByCreated_at(arr) {
+export function sortItemsByDate(arr) {
   return arr.sort(
     (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
   );

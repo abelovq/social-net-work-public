@@ -50,14 +50,36 @@ export const changePost = (id, data) => {
 };
 
 export const getCurrentUser = () => {
-  console.log("CALL");
   return {
     type: types.GET_CURRENT_USER
   };
 };
 
-export const showComments = () => {
+export const getComments = id => {
   return {
-    type: types.GET_ALL_COMMENTS
+    type: types.GET_POST_COMMENTS,
+    id
+  };
+};
+
+export const addComment = data => {
+  console.log(data);
+  return {
+    type: types.ADD_COMMENT,
+    data
+  };
+};
+
+export const changeComment = data => {
+  return {
+    type: types.CHANGE_COMMENT,
+    data
+  };
+};
+
+export const deleteComment = id => {
+  return {
+    type: types.DELETE_COMMENT,
+    id
   };
 };
