@@ -1,13 +1,11 @@
 import React from "react";
 
-import { Route, Redirect } from "react-router-dom";
-import { connect } from 'react-redux';
+import { Route, Redirect, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 import { Container } from "@material-ui/core";
 
-import { getCurrentUser } from './store/actions';
-
-import { getCreds } from './store/sagas/services';
+import { getCurrentUser } from "./store/actions";
 
 import Signup from "./pages/Signup/Signup";
 import Main from "./pages/Main/Main";
@@ -37,18 +35,30 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 };
 
 class App extends React.Component {
-
   state = {
     loaded: false
-  }
+  };
 
   componentDidMount() {
-
-    
-  
+    console.log("HISTOY", this.props.history);
+    if (
+      this.props.history.location.pathname !== "/" &&
+      this.props.history.location.pathname !== "/login"
+    ) {
+      console.log(1);
       this.props.getCurrentUser();
-      
-    
+    }
+  }
+
+  componentDidUpdate() {
+    console.log("HISTOY", this.props.history);
+    if (
+      this.props.history.location.pathname !== "/" &&
+      this.props.history.location.pathname !== "/login"
+    ) {
+      console.log(1);
+      this.props.getCurrentUser();
+    }
   }
 
   // componentDidUpdate(nextState) {
@@ -60,19 +70,14 @@ class App extends React.Component {
   // }
 
   render() {
-    console.log('RENDER')
-    // console.log('GREDS', getCreds())
+    console.log("QQQQQQQQQQQQQQQQQ");
     return (
       <Container maxWidth="sm">
         <Route exact path="/" component={Signup} />
         <Route path="/login" component={Login} />
         <Layout header={<Header />}>
           <PrivateRoute path="/main" component={Main} />
-          <PrivateRoute
-            path="/posts/:id"
-            component={Post}
-            // render={({ match }) => <Post id={match.params.id} exact />}
-          />
+          <PrivateRoute path="/posts/:id" component={Post} />
           <PrivateRoute path="/profile" component={Profile} />
           <Redirect from="*" to="/" />
         </Layout>
@@ -81,10 +86,16 @@ class App extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isAuth: state.login.isAuth
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     getCurrentUser: () => dispatch(getCurrentUser())
-  }
-}
+  };
+};
 
-export default connect(null, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

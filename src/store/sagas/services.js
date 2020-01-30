@@ -55,7 +55,7 @@ export const loginUserService = request => {
     .then(json => {
       return json;
     })
-    .catch(err => err);
+    .catch(err => console.log(err));
 };
 
 export const loadPostsService = () => {
@@ -109,7 +109,6 @@ export const createPostService = request => {
     .catch(err => err);
 };
 
-
 export const getPostService = id => {
   const GET_POST_API_ENDPOINT = `${apiUrl}/posts/${id}`;
 
@@ -135,7 +134,7 @@ export const getPostService = id => {
     .catch(err => err);
 };
 
-export const changePostService = ({id, data}) => {
+export const changePostService = ({ id, data }) => {
   const CHANGE_POST_API_ENDPOINT = `${apiUrl}/posts/${id}`;
 
   const credentials = getCreds();
@@ -156,27 +155,67 @@ export const changePostService = ({id, data}) => {
       return response.json();
     })
     .then(json => {
-      console.log(json)
+      console.log(json);
       return json;
     })
     .catch(err => err);
-}
+};
 
 export const getCurrentUserService = () => {
-  console.log('serv')
+  console.log("serv");
   const GET_CURRENT_USER_API_ENDPOINT = `${apiUrl}/users/me`;
   const credentials = getCreds();
 
   const parameters = {
-    method: 'GET',
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       ...credentials
-    },
-  }
+    }
+  };
 
   return fetch(GET_CURRENT_USER_API_ENDPOINT, parameters)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        console.log("NEOK");
+        throw new Error("HTTP status " + response.status);
+      } else {
+        console.log("ELSE");
+        return response.json();
+      }
+    })
     .then(json => json)
-    .catch(err => err);
-}
+    .catch(err => {
+      console.log("CATCH ERR");
+      return err;
+    });
+};
+
+export const getAllCommentsService = () => {
+  const GET_COMMENT_API_ENDPOINT = `${apiUrl}/comments`;
+  const credentials = getCreds();
+
+  const parameters = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...credentials
+    }
+  };
+
+  return fetch(GET_COMMENT_API_ENDPOINT, parameters)
+    .then(response => {
+      if (!response.ok) {
+        console.log("NEOK");
+        throw new Error("HTTP status " + response.status);
+      } else {
+        console.log("ELSE");
+        return response.json();
+      }
+    })
+    .then(json => json)
+    .catch(err => {
+      console.log("CATCH ERR");
+      return err;
+    });
+};

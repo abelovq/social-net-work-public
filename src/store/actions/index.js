@@ -46,12 +46,18 @@ export const changePost = (id, data) => {
     type: types.CHANGE_POST,
     id,
     data
-  }
-}
+  };
+};
 
 export const getCurrentUser = () => {
-  console.log('CALL')
+  console.log("CALL");
   return {
-    type: types.GET_CURRENT_USER,
-  }
-}
+    type: types.GET_CURRENT_USER
+  };
+};
+
+export const showComments = () => {
+  return {
+    type: types.GET_ALL_COMMENTS
+  };
+};

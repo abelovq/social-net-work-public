@@ -4,7 +4,7 @@ export function sortItemsByCreated_at(arr) {
   );
 }
 
-export function parseData({ created_at }, userId) {
+export function parseData(dataName, { created_at }, userId) {
   const date = new Date(Date.parse(created_at));
 
   const months = [
@@ -23,7 +23,17 @@ export function parseData({ created_at }, userId) {
   ];
   const month = months[date.getMonth()];
 
-  return `Comment was added by ${userId} on ${date.getDate()} ${month} ${date.getFullYear()} in ${date.getHours()}:${
+  return `${dataName} was added by ${userId} on ${date.getDate()} ${month} ${date.getFullYear()} in ${date.getHours()}:${
     date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
   } `;
+}
+
+export function getCommentsForUser(comments, userId) {
+  const res = [];
+  for (let i = 0; i < comments.length; i++) {
+    if (comments[i].user_id === userId) {
+      res.push(comments[i]);
+    }
+  }
+  return res;
 }

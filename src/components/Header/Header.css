@@ -1,13 +1,14 @@
 .header {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .header .logout-btn {
-    margin: 50px;
-    margin-left: 10px;
+  margin: 50px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 .header .profile-button {
-    margin: 50px 10px 50px 50px;
+  margin: 50px 10px 50px 50px;
 }
