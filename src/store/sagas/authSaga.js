@@ -16,17 +16,13 @@ function forwardTo(location) {
 function* registerSaga(payload) {
   try {
     const response = yield call(registerUserService, payload);
-    console.log('REG', response);
     if (!response.data) {
-      console.log(1, response);
       yield put({ type: types.REGISTER_USER_FAILURE });
     } else {
-      console.log(2);
       yield put({ type: types.REGISTER_USER_SUCCESS, response });
       yield call(forwardTo, '/');
     }
   } catch (error) {
-    console.log('error', error);
     yield put({ type: types.REGISTER_USER_FAILURE, error });
   }
 }

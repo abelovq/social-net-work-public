@@ -8,23 +8,23 @@ export function parseData(dataName, { created_at }, userId) {
   const date = new Date(Date.parse(created_at));
 
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Spt",
-    "Oct",
-    "Nov",
-    "Dec"
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Spt',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   const month = months[date.getMonth()];
 
   return `${dataName} was added by ${userId} on ${date.getDate()} ${month} ${date.getFullYear()} in ${date.getHours()}:${
-    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
+    date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
   } `;
 }
 

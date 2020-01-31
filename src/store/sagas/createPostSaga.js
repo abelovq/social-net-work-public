@@ -8,7 +8,6 @@ function* createPostSaga(payload) {
     const response = yield call(createPostService, payload);
     yield put({ type: types.CREATE_POST_SUCCESS, response });
   } catch (error) {
-    console.log('error', error);
     yield put({ type: types.CREATE_POST_FAILURE, error });
   }
 }

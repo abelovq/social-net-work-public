@@ -1,53 +1,53 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core';
 
-import { createPost } from '../../store/actions'
+import { createPost } from '../../store/actions';
 
-import './AddPostForm.css'
+import './AddPostForm.css';
 
 export class AddPostForm extends Component {
   static propTypes = {
     createPost: PropTypes.func.isRequired,
-  }
+  };
 
   state = {
     title: '',
     description: '',
     error: false,
-  }
+  };
 
   handleInput = ({ target }) => {
     this.setState({
       [target.name]: target.value,
-    })
-  }
+    });
+  };
 
   handleAddPost = e => {
-    e.preventDefault()
-    const { title, description } = this.state
+    e.preventDefault();
+    const { title, description } = this.state;
     if (title && description) {
       const data = {
         title,
         description,
-      }
-      this.props.createPost(data)
+      };
+      this.props.createPost(data);
       this.setState({
         title: '',
         description: '',
         error: false,
-      })
+      });
     } else {
       this.setState({
         error: true,
-      })
+      });
     }
-  }
+  };
 
   render() {
-    const { amount } = this.props
+    const { amount } = this.props;
     return (
       <div>
         <form className="add-post-form" onSubmit={this.handleAddPost}>
@@ -92,16 +92,14 @@ export class AddPostForm extends Component {
           </div>
         </form>
       </div>
-    )
+    );
   }
 }
-
-const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => {
   return {
     createPost: data => dispatch(createPost(data)),
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPostForm)
+export default connect(null, mapDispatchToProps)(AddPostForm);

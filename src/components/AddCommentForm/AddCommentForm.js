@@ -1,46 +1,50 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { addComment } from '../../store/actions'
+import { addComment } from '../../store/actions';
 
-import { TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core';
 
 export class AddPostForm extends Component {
-  static propTypes = {}
+  static propTypes = {
+    addComment: PropTypes.func.isRequired,
+    id: PropTypes.number,
+    amount: PropTypes.number,
+  };
 
   state = {
     text: '',
     error: false,
-  }
+  };
 
   handleInput = ({ target }) => {
     this.setState({
       [target.name]: target.value,
-    })
-  }
+    });
+  };
 
   handleAddComment = e => {
-    e.preventDefault()
+    e.preventDefault();
     const data = {
       message: this.state.text,
       commentable_id: this.props.id,
       commentable_type: 'Post',
-    }
+    };
     if (this.state.text) {
-      this.props.addComment(data)
+      this.props.addComment(data);
       this.setState({
         text: '',
         error: false,
-      })
+      });
     } else {
-      this.setState({ error: true })
+      this.setState({ error: true });
     }
-  }
+  };
 
   render() {
-    const { amount } = this.props
-    const { error } = this.state
+    const { amount } = this.props;
+    const { error } = this.state;
     return (
       <div>
         <form onSubmit={this.handleAddComment}>
@@ -67,7 +71,7 @@ export class AddPostForm extends Component {
           <button style={{ marginTop: '10px' }}>Add comment</button>
         </form>
       </div>
-    )
+    );
   }
 }
 
@@ -75,13 +79,13 @@ const mapStateToProps = state => {
   return {
     id: state.posts.currentPost.id,
     amount: state.posts.currentPost.comments.length,
-  }
-}
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     addComment: data => dispatch(addComment(data)),
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPostForm)
+export default connect(mapStateToProps, mapDispatchToProps)(AddPostForm);

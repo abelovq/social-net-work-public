@@ -1,13 +1,19 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Redirect, Link } from 'react-router-dom'
-import isEmail from 'validator/lib/isEmail'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-import { TextField, Container } from '@material-ui/core'
+import isEmail from 'validator/lib/isEmail';
 
-import { registerUser } from '../../store/actions'
+import { TextField, Container } from '@material-ui/core';
+
+import { registerUser } from '../../store/actions';
 
 class Signup extends Component {
+  static propTypes = {
+    registerUser: PropTypes.func.isRequired,
+  };
+
   state = {
     email: '',
     password: '',
@@ -15,27 +21,27 @@ class Signup extends Component {
     password_confirmError: false,
     isCorrectEmail: true,
     isCorrectPassword: true,
-  }
+  };
 
   handleInput = ({ target }) => {
     this.setState({
       [target.name]: target.value.trim(),
-    })
-  }
+    });
+  };
 
   handleRegister = e => {
-    e.preventDefault()
-    const { email, password, password_confirm } = this.state
+    e.preventDefault();
+    const { email, password, password_confirm } = this.state;
     if (!isEmail(email)) {
       this.setState({
         isCorrectEmail: false,
-      })
+      });
     }
     if (password.length < 6) {
       this.setState({
         isCorrectPassword: false,
         isCorrectEmail: true,
-      })
+      });
     }
     if (
       email &&
@@ -48,25 +54,25 @@ class Signup extends Component {
           email,
           password,
           password_confirm,
-        }
+        };
         this.setState({
           password_confirmError: false,
-        })
-        this.props.registerUser(data)
+        });
+        this.props.registerUser(data);
       } else {
         this.setState({
           password_confirmError: true,
-        })
+        });
       }
     } else {
       const data = {
         email,
         password,
         password_confirm,
-      }
-      this.props.registerUser(data)
+      };
+      this.props.registerUser(data);
     }
-  }
+  };
 
   render() {
     return (
@@ -125,20 +131,14 @@ class Signup extends Component {
           </div>
         </form>
       </Container>
-    )
-  }
-}
-
-const mapStateToProps = state => {
-  return {
-    registerData: state.register,
+    );
   }
 }
 
 const mapDispathToProps = dispatch => {
   return {
     registerUser: data => dispatch(registerUser(data)),
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, mapDispathToProps)(Signup)
+export default connect(null, mapDispathToProps)(Signup);

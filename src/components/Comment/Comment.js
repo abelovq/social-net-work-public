@@ -1,9 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { deleteComment, changeComment, getComments } from '../../store/actions';
 
 class Comment extends React.Component {
+  static propTypes = {
+    deleteComment: PropTypes.func.isRequired,
+    changeComment: PropTypes.func.isRequired,
+    getComments: PropTypes.func.isRequired,
+  };
+
   state = {
     text: '',
     comment: null,
@@ -19,7 +26,6 @@ class Comment extends React.Component {
     const {
       comment: { id },
     } = this.props;
-    console.log(id);
     this.props.deleteComment(id);
   };
 
@@ -33,14 +39,6 @@ class Comment extends React.Component {
     }
     return null;
   }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevProps.comment.message !== prevState.comment.message) {
-  //     const { getComments, userPostId } = this.props
-  //     console.log('UPDATE')
-
-  //   }
-  // }
 
   handleChangeCommentRequest = () => {
     const { id } = this.props.comment;

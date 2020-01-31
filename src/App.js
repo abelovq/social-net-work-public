@@ -1,21 +1,21 @@
-import React from 'react'
+import React from 'react';
+import { Route, Redirect, withRouter, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { Route, Redirect, withRouter, Switch } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { Container } from '@material-ui/core';
 
-import { Container } from '@material-ui/core'
+import { getCurrentUser } from './store/actions';
 
-import { getCurrentUser } from './store/actions'
+import Signup from './pages/Signup/Signup';
+import Main from './pages/Main/Main';
+import Login from './pages/Login';
+import Post from './components/Post';
+import Layout from './components/Layout';
+import Header from './components/Header';
+import Profile from './pages/Profile';
 
-import Signup from './pages/Signup/Signup'
-import Main from './pages/Main/Main'
-import Login from './pages/Login'
-import Post from './components/Post'
-import Layout from './components/Layout'
-import Header from './components/Header'
-import Profile from './pages/Profile'
-
-import './App.css'
+import './App.css';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
@@ -31,22 +31,17 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         )
       }
     />
-  )
-}
+  );
+};
 
 class App extends React.Component {
+  static propTypes = {
+    getCurrentUser: PropTypes.func.isRequired,
+  };
+
   componentDidMount() {
-    console.log('APP COMPONEN DID MOUNT')
-
-    console.log('CDM')
-    this.props.getCurrentUser()
+    this.props.getCurrentUser();
   }
-
-  // async componentDidUpdate(prevProps) {
-  //   if (this.props.isAuth !== prevProps.isAuth) {
-  //     await this.props.getCurrentUser()
-  //   }
-  // }
 
   render() {
     return (
@@ -62,20 +57,14 @@ class App extends React.Component {
           </Switch>
         </Layout>
       </Container>
-    )
-  }
-}
-
-const mapStateToProps = state => {
-  return {
-    isAuth: state.login.isAuth,
+    );
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     getCurrentUser: () => dispatch(getCurrentUser()),
-  }
-}
+  };
+};
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
+export default withRouter(connect(null, mapDispatchToProps)(App));

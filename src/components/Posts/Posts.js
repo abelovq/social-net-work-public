@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { loadPosts } from '../../store/actions';
 
@@ -9,16 +10,19 @@ import AddPostForm from '../AddPostForm';
 import { sortItemsByDate } from '../../store/utils';
 
 class Posts extends PureComponent {
+  static propTypes = {
+    posts: PropTypes.array.isRequired,
+    loading: PropTypes.bool,
+    loadPosts: PropTypes.func.isRequired,
+  };
+
   componentDidMount() {
-    console.log('MOUNT POSTS');
     const { loadPosts } = this.props;
     loadPosts();
-    console.log('DID MOUTN', this.props.posts); // why posts are not loaded ?
   }
 
   componentDidUpdate(prevProps) {
-    const { posts, loadPosts } = this.props;
-
+    // TODO
     // if (posts.length !== prevProps.posts.length) {
     //   console.log('INNER UPDATE')
     //   loadPosts()
@@ -46,7 +50,6 @@ class Posts extends PureComponent {
   };
 
   render() {
-    console.log('RENDERING !!!!!!!!!!!!', this.props.posts);
     const { loading, posts } = this.props;
     return (
       <>

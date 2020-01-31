@@ -1,13 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import { withRouter, NavLink } from "react-router-dom";
+import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter, NavLink } from 'react-router-dom';
 
-import "./Profile.css";
+import './Profile.css';
 
 function Profile({ userData, posts, history }) {
   const { id, email, firs_name: first_name, last_name } = userData;
+
   const getPostssByUser = (userId, posts) => {
-    console.log(userId, posts);
     return posts.reduce((acc, post) => {
       if (userId === post.user_id) {
         acc.push(post);
@@ -15,26 +15,31 @@ function Profile({ userData, posts, history }) {
       return acc;
     }, []);
   };
+
   let userPosts;
   if (posts) {
     userPosts = getPostssByUser(id, posts);
   }
-  console.log();
+
+  const historyBack = () => {
+    history.goBack();
+  };
+
   return (
     <>
       Info: {email}
       {first_name}
       {last_name}
       <br />
-      Posts:{" "}
+      Posts:{' '}
       {userPosts.length ? (
         userPosts.map(post => (
           <div
             key={post.id}
-            style={{ marginBottom: "10px", backgroundColor: "#eee" }}
+            style={{ marginBottom: '10px', backgroundColor: '#eee' }}
           >
             <NavLink
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: 'none' }}
               to={`/posts/${post.id}`}
             >
               <p>Post title: {post.title}</p>
@@ -45,12 +50,7 @@ function Profile({ userData, posts, history }) {
       ) : (
         <p>Not posts yet</p>
       )}
-      <button
-        onClick={() => {
-          history.goBack();
-        }}
-        className="profile-back-btn"
-      >
+      <button onClick={historyBack} className="profile-back-btn">
         &larr; Back
       </button>
     </>
@@ -60,7 +60,7 @@ function Profile({ userData, posts, history }) {
 const mapStateToProps = state => {
   return {
     userData: state.login.user,
-    posts: state.posts.posts
+    posts: state.posts.posts,
   };
 };
 
