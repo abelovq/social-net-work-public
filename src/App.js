@@ -41,7 +41,9 @@ class App extends React.Component {
 
   componentDidMount() {
     this.props.getCurrentUser();
-    this.props.loadPosts();
+    if (JSON.parse(localStorage.getItem('authtoken'))) {
+      this.props.loadPosts();
+    }
   }
 
   render() {
