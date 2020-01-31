@@ -20,9 +20,11 @@ export default (state = initialState, action) => {
         error: false,
         isAuth: false,
       }
+    case types.REGISTER_USER_SUCCESS:
+      const { data: userReg } = action.response
+      return { ...state, error: false, user: userReg }
     case types.GET_CURRENT_USER_SUCCESS:
       const { data: user } = action.response
-      console.log('REDUCER---------', user)
       return { ...state, user, isAuth: true }
     case types.GET_CURRENT_USER_FAILURE:
       return {

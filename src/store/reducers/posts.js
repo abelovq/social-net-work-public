@@ -13,6 +13,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.LOAD_POSTS_SUCCESS:
+      console.log('POST REDUCER', action.response)
       return {
         ...state,
         posts: action.response,

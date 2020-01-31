@@ -1,15 +1,14 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { createPostService } from "./services";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { createPostService } from './services';
 
-import * as types from "../constants";
+import * as types from '../constants';
 
 function* createPostSaga(payload) {
-  console.log("payload", payload);
   try {
     const response = yield call(createPostService, payload);
     yield put({ type: types.CREATE_POST_SUCCESS, response });
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
     yield put({ type: types.CREATE_POST_FAILURE, error });
   }
 }

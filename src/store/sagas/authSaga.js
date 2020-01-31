@@ -1,73 +1,74 @@
-import { put, call, takeEvery } from 'redux-saga/effects'
+import { put, call, takeEvery } from 'redux-saga/effects';
 import {
   registerUserService,
   loginUserService,
   getCurrentUserService,
-} from './services'
+} from './services';
 
-import { history } from '../../index'
+import { history } from '../../index';
 
-import * as types from '../constants'
+import * as types from '../constants';
 
 function forwardTo(location) {
-  history.push(location)
+  history.push(location);
 }
 
 function* registerSaga(payload) {
   try {
-    const response = yield call(registerUserService, payload)
+    const response = yield call(registerUserService, payload);
+    console.log('REG', response);
     if (!response.data) {
-      console.log(1, response)
-      yield put({ type: types.REGISTER_USER_FAILURE })
+      console.log(1, response);
+      yield put({ type: types.REGISTER_USER_FAILURE });
     } else {
-      console.log(2)
-      yield put({ type: types.REGISTER_USER_SUCCESS, response })
-      yield call(forwardTo, '/')
+      console.log(2);
+      yield put({ type: types.REGISTER_USER_SUCCESS, response });
+      yield call(forwardTo, '/');
     }
   } catch (error) {
-    console.log('error', error)
-    yield put({ type: types.REGISTER_USER_FAILURE, error })
+    console.log('error', error);
+    yield put({ type: types.REGISTER_USER_FAILURE, error });
   }
 }
 
 function* loginSaga(payload) {
   try {
-    const response = yield call(loginUserService, payload)
+    const response = yield call(loginUserService, payload);
     if (!response.data) {
-      yield put({ type: types.LOGIN_USER_FAILURE })
+      yield put({ type: types.LOGIN_USER_FAILURE });
     } else {
-      yield put({ type: types.LOGIN_USER_SUCCESS, response })
-      yield call(forwardTo, '/')
+      yield put({ type: types.LOGIN_USER_SUCCESS, response });
+      yield call(forwardTo, '/');
     }
   } catch (error) {
-    yield put({ type: types.LOGIN_USER_FAILURE, error })
+    yield put({ type: types.LOGIN_USER_FAILURE, error });
   }
 }
 
 function* logOutSaga() {
   try {
-    yield call(forwardTo, '/login')
+    yield call(forwardTo, '/login');
   } catch (error) {
-    yield put({ type: types.LOGIN_USER_FAILURE, error })
+    yield put({ type: types.LOGIN_USER_FAILURE, error });
   }
 }
 
 function* getCurrentUser() {
   try {
-    const response = yield call(getCurrentUserService)
+    const response = yield call(getCurrentUserService);
     if (!response.data) {
-      yield put({ type: types.GET_CURRENT_USER_FAILURE })
+      yield put({ type: types.GET_CURRENT_USER_FAILURE });
     } else {
-      yield put({ type: types.GET_CURRENT_USER_SUCCESS, response })
-    } // ASK
+      yield put({ type: types.GET_CURRENT_USER_SUCCESS, response });
+    }
   } catch (err) {
-    yield put({ type: types.GET_CURRENT_USER_FAILURE })
+    yield put({ type: types.GET_CURRENT_USER_FAILURE });
   }
 }
 
 export default function* watchUserAuthentication() {
-  yield takeEvery(types.REGISTER_USER, registerSaga)
-  yield takeEvery(types.LOGIN_USER, loginSaga)
-  yield takeEvery(types.LOGOUT_USER, logOutSaga)
-  yield takeEvery(types.GET_CURRENT_USER, getCurrentUser)
+  yield takeEvery(types.REGISTER_USER, registerSaga);
+  yield takeEvery(types.LOGIN_USER, loginSaga);
+  yield takeEvery(types.LOGOUT_USER, logOutSaga);
+  yield takeEvery(types.GET_CURRENT_USER, getCurrentUser);
 }
