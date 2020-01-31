@@ -1,40 +1,41 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
-import isEmail from "validator/lib/isEmail";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Redirect, Link } from 'react-router-dom'
+import isEmail from 'validator/lib/isEmail'
 
-import { TextField, Container } from "@material-ui/core";
+import { TextField, Container } from '@material-ui/core'
 
-import { registerUser } from "../../store/actions";
+import { registerUser } from '../../store/actions'
 
 class Signup extends Component {
   state = {
-    email: "",
-    password: "",
-    password_confirm: "",
+    email: '',
+    password: '',
+    password_confirm: '',
     password_confirmError: false,
     isCorrectEmail: true,
-    isCorrectPassword: true
-  };
+    isCorrectPassword: true,
+  }
 
   handleInput = ({ target }) => {
     this.setState({
-      [target.name]: target.value.trim()
-    });
-  };
+      [target.name]: target.value.trim(),
+    })
+  }
 
   handleRegister = e => {
-    e.preventDefault();
-    const { email, password, password_confirm } = this.state;
+    e.preventDefault()
+    const { email, password, password_confirm } = this.state
     if (!isEmail(email)) {
       this.setState({
-        isCorrectEmail: false
-      });
+        isCorrectEmail: false,
+      })
     }
     if (password.length < 6) {
       this.setState({
-        isCorrectPassword: false
-      });
+        isCorrectPassword: false,
+        isCorrectEmail: true,
+      })
     }
     if (
       email &&
@@ -46,25 +47,31 @@ class Signup extends Component {
         const data = {
           email,
           password,
-          password_confirm
-        };
+          password_confirm,
+        }
         this.setState({
-          password_confirmError: false
-        });
-        this.props.registerUser(data);
+          password_confirmError: false,
+        })
+        this.props.registerUser(data)
       } else {
         this.setState({
-          password_confirmError: true
-        });
+          password_confirmError: true,
+        })
       }
+    } else {
+      const data = {
+        email,
+        password,
+        password_confirm,
+      }
+      this.props.registerUser(data)
     }
-    return;
-  };
+  }
 
   render() {
     return (
       <Container maxWidth="sm">
-        {JSON.parse(localStorage.getItem("authToken")) && <Redirect to="/" />}
+        {JSON.parse(localStorage.getItem('authToken')) && <Redirect to="/" />}
         <h1>welcome to social net work</h1>
         <form noValidate autoComplete="off" onSubmit={this.handleRegister}>
           <TextField
@@ -99,39 +106,39 @@ class Signup extends Component {
             onChange={this.handleInput}
           />
           {!this.state.isCorrectEmail && (
-            <p style={{ color: "#E87C03" }}>Please enter a valid email</p>
+            <p style={{ color: '#E87C03' }}>Please enter a valid email</p>
           )}
           {!this.state.isCorrectPassword && (
-            <p style={{ color: "#E87C03" }}>
+            <p style={{ color: '#E87C03' }}>
               Password must be at least 6 characters
             </p>
           )}
           {this.state.password_confirmError && (
-            <p style={{ color: "#E87C03" }}>Wrong confirm password</p>
+            <p style={{ color: '#E87C03' }}>Wrong confirm password</p>
           )}
-          <button style={{ marginTop: "20px" }} type="submit">
+          <button style={{ marginTop: '20px' }} type="submit">
             Register
           </button>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <p style={{ marginRight: "20px" }}>Already have an account?</p>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <p style={{ marginRight: '20px' }}>Already have an account?</p>
             <Link to="/login">Sign In</Link>
           </div>
         </form>
       </Container>
-    );
+    )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    registerData: state.register
-  };
-};
+    registerData: state.register,
+  }
+}
 
 const mapDispathToProps = dispatch => {
   return {
-    registerUser: data => dispatch(registerUser(data))
-  };
-};
+    registerUser: data => dispatch(registerUser(data)),
+  }
+}
 
-export default connect(mapStateToProps, mapDispathToProps)(Signup);
+export default connect(mapStateToProps, mapDispathToProps)(Signup)

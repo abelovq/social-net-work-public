@@ -1,40 +1,41 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Redirect, Link } from 'react-router-dom'
 
-import { TextField, Container } from "@material-ui/core";
+import { TextField, Container } from '@material-ui/core'
 
-import { loginUser } from "../../store/actions";
+import { loginUser } from '../../store/actions'
 
 class Login extends Component {
   state = {
-    email: "",
-    password: ""
-  };
+    email: '',
+    password: '',
+  }
 
   handleInput = ({ target }) => {
     this.setState({
-      [target.name]: target.value
-    });
-  };
+      [target.name]: target.value,
+    })
+  }
 
   handleLogin = e => {
-    e.preventDefault();
-    const { email, password } = this.state;
+    e.preventDefault()
+    const { email, password } = this.state
     if (email && password) {
       const data = {
         email,
-        password
-      };
-      this.props.loginUser(data);
+        password,
+      }
+      this.props.loginUser(data)
     }
-    return;
-  };
+    return
+  }
 
   render() {
+    const { failedLogin } = this.props
     return (
       <Container maxWidth="sm">
-        {JSON.parse(localStorage.getItem("authToken")) && <Redirect to="/" />}
+        {JSON.parse(localStorage.getItem('authToken')) && <Redirect to="/" />}
         <h1>Login</h1>
         <form noValidate autoComplete="off" onSubmit={this.handleLogin}>
           <TextField
@@ -58,27 +59,31 @@ class Login extends Component {
             fullWidth
             onChange={this.handleInput}
           />
+          {failedLogin && (
+            <p style={{ color: '#E87C03' }}>Uncorrect login or password</p>
+          )}
           <div>
-            <input style={{ marginTop: "20px" }} type="submit" value="Login" />
+            <input style={{ marginTop: '20px' }} type="submit" value="Login" />
             <p>Don't have an account?</p>
             <Link to="/sign_up">Sign Up</Link>
           </div>
         </form>
       </Container>
-    );
+    )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    user: state.register
-  };
-};
+    user: state.register,
+    failedLogin: state.login.error,
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginUser: data => dispatch(loginUser(data))
-  };
-};
+    loginUser: data => dispatch(loginUser(data)),
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
