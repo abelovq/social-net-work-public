@@ -37,3 +37,12 @@ export function getCommentsForUser(comments, userId) {
   }
   return res;
 }
+
+export function getPostsByUser(userId, posts) {
+  return posts.reduce((acc, post) => {
+    if (userId === post.user_id) {
+      acc.push(post);
+    }
+    return acc;
+  }, []);
+}

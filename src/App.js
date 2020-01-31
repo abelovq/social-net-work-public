@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { Container } from '@material-ui/core';
 
-import { getCurrentUser } from './store/actions';
+import { getCurrentUser, loadPosts } from './store/actions';
 
 import Signup from './pages/Signup/Signup';
 import Main from './pages/Main/Main';
@@ -41,12 +41,13 @@ class App extends React.Component {
 
   componentDidMount() {
     this.props.getCurrentUser();
+    this.props.loadPosts();
   }
 
   render() {
     return (
-      <Container maxWidth="sm">
-        <Layout header={<Header />}>
+      <Layout header={<Header />}>
+        <Container maxWidth="md">
           <Switch>
             <Route path="/sign_up" component={Signup} />
             <Route path="/login" component={Login} />
@@ -55,8 +56,8 @@ class App extends React.Component {
             <PrivateRoute path="/profile" component={Profile} />
             <Redirect from="*" to="/login" />
           </Switch>
-        </Layout>
-      </Container>
+        </Container>
+      </Layout>
     );
   }
 }
@@ -64,6 +65,7 @@ class App extends React.Component {
 const mapDispatchToProps = dispatch => {
   return {
     getCurrentUser: () => dispatch(getCurrentUser()),
+    loadPosts: () => dispatch(loadPosts()),
   };
 };
 
