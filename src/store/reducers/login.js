@@ -3,7 +3,7 @@ import * as types from '../constants'
 const initialState = {
   user: {},
   error: false,
-  isAuth: JSON.parse(localStorage.getItem('authToken')),
+  isAuth: false,
 }
 
 export default (state = initialState, action) => {

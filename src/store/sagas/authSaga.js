@@ -8,22 +8,28 @@ import {
 import { history } from '../../index';
 
 import * as types from '../constants';
+import { rejectAction } from '../../utils';
 
 function forwardTo(location) {
   history.push(location);
 }
 
 function* registerSaga(payload) {
+  console.log(`payload`, payload)
   try {
     const response = yield call(registerUserService, payload);
-    if (!response.data) {
-      yield put({ type: types.REGISTER_USER_FAILURE });
-    } else {
-      yield put({ type: types.REGISTER_USER_SUCCESS, response });
-      yield call(forwardTo, '/');
-    }
+    // if (!response.data) {
+    //   yield put({ type: types.REGISTER_USER_FAILURE, response });
+    // } else {
+    yield put({ type: types.REGISTER_USER_SUCCESS, response });
+    yield call(forwardTo, '/');
+    // }
   } catch (error) {
-    yield put({ type: types.REGISTER_USER_FAILURE, error });
+
+    console.log(`error`, error)
+    // yield put({ type: types.REGISTER_USER_FAILURE, error });
+    yield rejectAction(payload, error)
+
   }
 }
 

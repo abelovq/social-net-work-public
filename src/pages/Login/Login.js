@@ -41,7 +41,7 @@ class Login extends Component {
     const { failedLogin } = this.props;
     return (
       <Container maxWidth="sm">
-        {JSON.parse(localStorage.getItem('authToken')) && <Redirect to="/" />}
+        {/* {JSON.parse(localStorage.getItem('authToken')) && <Redirect to="/" />} */}
         <h1>Login</h1>
         <form noValidate autoComplete="off" onSubmit={this.handleLogin}>
           <TextField

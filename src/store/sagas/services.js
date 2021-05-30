@@ -23,16 +23,24 @@ export const registerUserService = request => {
 
   return fetch(REGISTER_API_ENDPOINT, parameters)
     .then(response => {
-      if (!response.ok) {
-        throw new Error('HTTP status ' + response.status);
+      if (response.ok) {
+        saveToken(response);
       }
-      saveToken(response);
       return response.json();
     })
     .then(json => {
+      console.log(`json`, json)
+      if (json.status === 'error') {
+        throw { [Object.keys(json.errors)[0]]: json.errors[[Object.keys(json.errors)[0]]][0] }
+      }
       return json;
     })
-    .catch(err => err);
+    .catch(err => {
+      let a = { a: { a: 1 } }
+      console.log(`a`, {})
+      console.log(`err servics`, err)
+      throw err
+    });
 };
 
 export const loginUserService = request => {

@@ -21,15 +21,22 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
-        localStorage.getItem('authToken') ? (
-          <Component {...props} />
-        ) : (
+      render={props => {
+        // console.log(`props`, rest)
+        if (localStorage.getItem('authToken') && rest.isAuth === true) {
+          console.log(1)
+          return (<Component {...props} />)
+        }
+        console.log(2)
+        return (
           <Redirect
             to={{ pathname: '/login', state: { from: props.location } }}
           />
         )
+
       }
+      }
+
     />
   );
 };
@@ -40,22 +47,24 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+
     this.props.getCurrentUser();
-    if (JSON.parse(localStorage.getItem('authtoken'))) {
+    if (JSON.parse(localStorage.getItem('authtoken')) && this.props.isAuth === true) {
       this.props.loadPosts();
     }
   }
 
   render() {
+    console.log('CDM')
     return (
       <Layout header={<Header />}>
         <Container maxWidth="md">
           <Switch>
             <Route path="/sign_up" component={Signup} />
             <Route path="/login" component={Login} />
-            <PrivateRoute exact path="/" component={Main} />
-            <PrivateRoute path="/posts/:id" component={Post} />
-            <PrivateRoute path="/profile" component={Profile} />
+            <PrivateRoute exact path="/" component={Main} isAuth={this.props.isAuth} />
+            <PrivateRoute path="/posts/:id" component={Post} isAuth={this.props.isAuth} />
+            <PrivateRoute path="/profile" component={Profile} isAuth={this.props.isAuth} />
             <Redirect from="*" to="/login" />
           </Switch>
         </Container>
@@ -64,6 +73,12 @@ class App extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    isAuth: state.login.isAuth
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     getCurrentUser: () => dispatch(getCurrentUser()),
@@ -71,4 +86,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
