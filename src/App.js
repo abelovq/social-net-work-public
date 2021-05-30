@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Redirect, withRouter, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Container } from '@material-ui/core';
@@ -14,6 +14,8 @@ import Post from './components/Post';
 import Layout from './components/Layout';
 import Header from './components/Header';
 import Profile from './pages/Profile';
+
+import { useHistory } from "react-router-dom";
 
 import './App.css';
 
@@ -41,49 +43,63 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-class App extends React.Component {
-  static propTypes = {
-    getCurrentUser: PropTypes.func.isRequired,
-  };
-
-  componentDidMount() {
-
-    this.props.getCurrentUser();
-    if (JSON.parse(localStorage.getItem('authtoken')) && this.props.isAuth === true) {
-      this.props.loadPosts();
+const AuthComp = (Comp, ...props) => {
+  let history = useHistory();
+  console.log(props)
+  const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.login.isAuth)
+  console.log(`isAuth`, isAuth)
+  const checkRedirect = () => {
+    if (!isAuth) {
+      history.push('/login')
     }
   }
 
-  render() {
-    console.log('CDM')
-    return (
-      <Layout header={<Header />}>
-        <Container maxWidth="md">
-          <Switch>
-            <Route path="/sign_up" component={Signup} />
-            <Route path="/login" component={Login} />
-            <PrivateRoute exact path="/" component={Main} isAuth={this.props.isAuth} />
-            <PrivateRoute path="/posts/:id" component={Post} isAuth={this.props.isAuth} />
-            <PrivateRoute path="/profile" component={Profile} isAuth={this.props.isAuth} />
-            <Redirect from="*" to="/login" />
-          </Switch>
-        </Container>
-      </Layout>
-    );
-  }
+  useEffect(() => {
+    checkRedirect()
+    return () => {
+
+    }
+  }, [isAuth])
+  return <Comp {...props} />
+
 }
 
-const mapStateToProps = state => {
-  return {
-    isAuth: state.login.isAuth
-  };
-};
+const App = (props) => {
+  const dispatch = useDispatch()
+  const isAuth = useSelector(state => state.login.isAuth)
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getCurrentUser: () => dispatch(getCurrentUser()),
-    loadPosts: () => dispatch(loadPosts()),
-  };
-};
+  useEffect(() => {
+    dispatch(getCurrentUser());
+    // if (JSON.parse(localStorage.getItem('authtoken')) && this.props.isAuth === true) {
+    dispatch(loadPosts());
+    // }
+  })
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+  console.log('CDM', props)
+  return (
+    <Layout header={<Header />}>
+      <Container maxWidth="md">
+        <Switch>
+          <Route path="/sign_up" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route exact path="/" {...props}>
+            {AuthComp(Main)}
+          </Route>
+          <Route exact path="/posts/:id" {...props}>
+            {AuthComp(Post)}
+          </Route>
+          <Route exact path="/profile" {...props}>
+            {AuthComp(Profile)}
+          </Route>
+          {/* <Route  component={Post} isAuth={this.props.isAuth} />
+          <Route  component={Profile} isAuth={this.props.isAuth} /> */}
+          <Redirect from="*" to="/login" />
+        </Switch>
+      </Container>
+    </Layout>
+  );
+
+}
+
+export default App;
